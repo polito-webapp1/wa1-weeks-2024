@@ -1,10 +1,1 @@
-POST http://localhost:3001/api/answers/1/vote
-content-type: application/json
-
-{
-  "vote": "upvote"
-}
-
-###
-
-GET http://localhost:3001/api/questions
+GET http://localhost:3000/questions/111
