@@ -1,0 +1,11 @@
+GET http://localhost:3000/questions/111
+
+###
+
+POST http://localhost:3000/questions/
+Content-Type: application/json
+
+{
+    "text": "new question",
+    "email": "luca.mannella@polito.it"
+}
