@@ -1,6 +1,6 @@
 import { Row, Col, Table, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import {ArrowUp, PencilSquare, Trash} from 'react-bootstrap-icons';
+import { ArrowUp, PencilSquare, Trash } from 'react-bootstrap-icons';
 
 function Answers(props) {
   return (
@@ -10,8 +10,8 @@ function Answers(props) {
       </Row>
       <Row>
         <Col lg={10} className="mx-auto">
-          <AnswerTable answers={props.answers}></AnswerTable>
-        </Col> 
+          <AnswerTable answers={props.answers} deleteAnswer={props.deleteAnswer} voteUp={props.voteUp}></AnswerTable>
+        </Col>
       </Row>
     </>
   );
@@ -36,7 +36,7 @@ function AnswerTable(props) {
       </thead>
       <tbody>
         {
-          props.answers.map((ans) => <AnswerRow answer={ans} key={ans.id} />)
+          props.answers.map((ans) => <AnswerRow answer={ans} key={ans.id} deleteAnswer={props.deleteAnswer} voteUp={props.voteUp}/>)
         }
       </tbody>
     </Table>
@@ -48,8 +48,11 @@ AnswerTable.propTypes = {
 }
 
 function AnswerRow(props) {
-  return(
-    <tr><AnswerData answer={props.answer}/><AnswerActions /></tr>
+  return (
+    <tr>
+      <AnswerData answer={props.answer} />
+      <AnswerActions deleteAnswer={props.deleteAnswer} voteUp={props.voteUp} id={props.answer.id} />
+    </tr>
   );
 }
 
@@ -58,7 +61,7 @@ AnswerRow.propTypes = {
 }
 
 function AnswerData(props) {
-  return(
+  return (
     <>
       <td>{props.answer.date.format('YYYY-MM-DD')}</td>
       <td>{props.answer.text}</td>
@@ -72,11 +75,11 @@ AnswerData.propTypes = {
   answer: PropTypes.object
 }
 
-function AnswerActions() {
+function AnswerActions(props) {
   return <td>
-    <Button variant='warning'><ArrowUp/></Button>
-    <Button variant='primary' className='mx-1'><PencilSquare/></Button> 
-    <Button variant='danger'><Trash/></Button>
+    <Button variant='warning' onClick={()=>{props.voteUp(props.id)}}><ArrowUp /></Button>
+    <Button variant='primary' className='mx-1'><PencilSquare /></Button>
+    <Button variant='danger' onClick={()=>{props.deleteAnswer(props.id)}}><Trash /></Button>
   </td>
 }
 
