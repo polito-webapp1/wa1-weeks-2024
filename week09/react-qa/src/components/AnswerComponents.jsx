@@ -42,7 +42,7 @@ function Answers(props) {
         />
       }
 
-      {mode === 'default' && <Button variant='primary' onClick={() => setMode('add')}>Add</Button>}
+      {mode === 'default' && <Button variant='primary' onClick={() => {setMode('add');}}>Add</Button>}
       
       <h5>{mode}</h5>
     </>
