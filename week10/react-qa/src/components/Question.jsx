@@ -1,6 +1,4 @@
 import { Container, Col, Row } from "react-bootstrap";
-import PropTypes from 'prop-types';
-import { useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 
 
@@ -14,27 +12,22 @@ function QuestionComponent(props) {
 
   return (
     <>
-    <Container>
-      <Row>
-        <Col md={3}>
-          <p>{number}</p>
-        </Col>
-        <Col md={3}>
-          <p>{question}</p>
-        </Col>
-        <Col md={3}>
-          <p>{email}</p>
-        </Col>
-        <Col onClick={props.increaseLikes}>
-        Likes: {props.likes}</Col>
-      </Row>
-    </Container>
-    <Outlet></Outlet>
+      <Container>
+        <Row>
+          <Col md={2}>
+            <p>{number}</p>
+          </Col>
+          <Col md={6}>
+            <p>{question}</p>
+          </Col>
+          <Col md={4}>
+            <p>{email}</p>
+          </Col>
+        </Row>
+      </Container>
+      <Outlet></Outlet>
     </>
   )
-}
-
-QuestionComponent.propTypes = {
 }
 
 export default QuestionComponent

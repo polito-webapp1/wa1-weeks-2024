@@ -1,14 +1,12 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import NavigationBar from './components/NavigationBar';
 import QuestionComponent from './components/Question';
 import { Question, Answer } from './QAModels.mjs';
 import { Answers } from './components/AnswerComponents';
-import { Like } from './components/Like';
 import { useState } from 'react';
-import LanguageContext  from './contexts/LanguageContext';
-import {Routes, Route, Link} from 'react-router-dom' ;
-import AnswerForm from './components/AnswerForm';
+import LanguageContext from './contexts/LanguageContext';
+import { Routes, Route, Link } from 'react-router-dom';
+import { AnswerForm, EditAnswerForm } from './components/AnswerForm';
 
 const fakeQuestion = new Question(1, 'What is your name?', 'juan@polito.it', '2024-02-07')
 fakeQuestion.init();
@@ -28,11 +26,9 @@ function App() {
 
   const [likes, setLikes] = useState(0);
 
-  const [comment, setComment] = useState('ok');
-
   const [language, setLanguage] = useState('IT');
 
-  const toggleLanguage = () => { setLanguage(language === 'IT' ? 'EN' : 'IT')}
+  const toggleLanguage = () => { setLanguage(language === 'IT' ? 'EN' : 'IT') }
 
   const increaseLikes = () => { setLikes(oldLikes => oldLikes + 1) };
 
@@ -65,9 +61,10 @@ function App() {
   }
 
   const updateAnswer = (answer) => {
+    console.log(answer)
     setAnswers(oldAnswers => {
       return oldAnswers.map((ans) => {
-        if(ans.id === answer.id) {
+        if (ans.id === answer.id) {
           return new Answer(answer.id, answer.text, answer.email, answer.date, ans.score);
         }
         else
@@ -84,23 +81,20 @@ function App() {
   return (
     <LanguageContext.Provider value={language}>
       <Container>
-        <NavigationBar qtnnumber={1} language={language} toggleLanguage={toggleLanguage}/>
+        <NavigationBar language={language} toggleLanguage={toggleLanguage} />
         <Routes>
           <Route path='/' element={
-              <p>List of questions -
+            <p>List of questions -
               <Link to='/questions/3'>Go to 3</Link></p>
-          }/>
+          } />
           <Route path='/questions/:qid' element={
-            <QuestionComponent likes={likes} increaseLikes={increaseLikes} question={question}/>
+            <QuestionComponent likes={likes} increaseLikes={increaseLikes} question={question} />
           }>
-            <Route path='add' element={<AnswerForm addAnswer={addAnswer} mode='add'/>}/>
-            <Route index element={<Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer}/>}/>
+            <Route index element={<Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer} />} />
+            <Route path='add' element={<AnswerForm addAnswer={addAnswer} mode='add' />} />
+            <Route path='edit/:aid' element={<EditAnswerForm updateAnswer={updateAnswer} answers={answers} />} />
           </Route>
         </Routes>
-
-
-        {/* <QuestionComponent likes={likes} increaseLikes={increaseLikes} qtnnumber={question.id} question={question.text} email={question.email}></QuestionComponent>
-        <Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer}></Answers> */}
       </Container>
     </LanguageContext.Provider>
   )

@@ -2,24 +2,14 @@ import { Row, Col, Table, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { ArrowUp, PencilSquare, Trash } from 'react-bootstrap-icons';
 import { useContext, useState } from 'react';
-import AnswerForm from './AnswerForm';
-import LanguageContext from '../contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
+import LanguageContext from '../contexts/LanguageContext';
 
 function Answers(props) {
 
-  const [mode, setMode] = useState('default');
-
-  const [editableAnswer, setEditableAnswer] = useState();
-
-  const language = useContext(LanguageContext) ;
+  const language = useContext(LanguageContext);
 
   const navigate = useNavigate();
-
-  const handleEdit = (answer) => {
-    setEditableAnswer(answer);
-    setMode('edit');
-  }
 
   return (
     <>
@@ -28,30 +18,12 @@ function Answers(props) {
       </Row>
       <Row>
         <Col lg={10} className="mx-auto">
-          <AnswerTable answers={props.answers} deleteAnswer={props.deleteAnswer} voteUp={props.voteUp} handleEdit={handleEdit}></AnswerTable>
+          <AnswerTable answers={props.answers} deleteAnswer={props.deleteAnswer} voteUp={props.voteUp}></AnswerTable>
         </Col>
       </Row>
-      {mode === 'add' &&
-        <AnswerForm
-          mode = {mode}
-          addAnswer={(answer) => {props.addAnswer(answer); setMode('default');}}
-          cancel={() => setMode('default')}
-        />
-      }
 
-      {mode === 'edit' &&
-        <AnswerForm
-          key={editableAnswer.id}
-          mode={mode}
-          answer={editableAnswer}
-          cancel={() => setMode('default')}
-          updateAnswer={(answer) => { props.updateAnswer(answer); setMode('default'); }}
-        />
-      }
+      <Button variant='primary' onClick={() => { navigate('add'); }}>{language == 'IT' ? 'Aggiungi' : 'Add'}</Button>
 
-      {mode === 'default' && <Button variant='primary' onClick={() => {navigate('add');}}>{language=='IT'? 'Aggiungi': 'Add'}</Button>}
-      
-      <h5>{mode}</h5>
     </>
   );
 }
@@ -91,7 +63,7 @@ function AnswerTable(props) {
         </thead>
         <tbody>
           {
-            sortedAnswers.map((ans) => <AnswerRow answer={ans} key={ans.id} deleteAnswer={props.deleteAnswer} voteUp={props.voteUp} handleEdit={props.handleEdit} />)
+            sortedAnswers.map((ans) => <AnswerRow answer={ans} key={ans.id} deleteAnswer={props.deleteAnswer} voteUp={props.voteUp} />)
           }
         </tbody>
       </Table>
@@ -132,9 +104,10 @@ AnswerData.propTypes = {
 }
 
 function AnswerActions(props) {
+  const navigate = useNavigate();
   return <td>
     <Button variant='warning' onClick={() => { props.voteUp(props.id) }}><ArrowUp /></Button>
-    <Button variant='primary' className='mx-1' onClick={() => { props.handleEdit(props.answer) }}><PencilSquare /></Button>
+    <Button variant='primary' className='mx-1' onClick={() => { navigate(`edit/${props.id}`) }}><PencilSquare /></Button>
     <Button variant='danger' onClick={() => { props.deleteAnswer(props.id) }}><Trash /></Button>
   </td>
 }
