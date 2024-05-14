@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {Form, Button} from 'react-bootstrap'
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 function AnswerForm(props){
 
@@ -13,6 +14,8 @@ function AnswerForm(props){
   const [text, setText] = useState(props.answer ? props.answer.text : '');
   const [email, setEmail] = useState(props.answer ? props.answer.email : '');
   const [date, setDate] = useState(props.answer ? props.answer.date.format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'));
+
+  const navigate = useNavigate() ;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -55,7 +58,7 @@ function AnswerForm(props){
       {props.mode==='add' && <Button variant='primary' type='Submit'>Add</Button>}
       {props.mode==='edit' && <Button variant='primary' type='Submit'>Edit</Button>}
       {' '}
-      <Button variant='danger' onClick={props.cancel}>Cancel</Button>
+      <Button variant='danger' onClick={()=>{navigate('..')}}>Cancel</Button>
     </Form>
   )
 }

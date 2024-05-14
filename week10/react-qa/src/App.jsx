@@ -7,6 +7,8 @@ import { Answers } from './components/AnswerComponents';
 import { Like } from './components/Like';
 import { useState } from 'react';
 import LanguageContext  from './contexts/LanguageContext';
+import {Routes, Route, Link} from 'react-router-dom' ;
+import AnswerForm from './components/AnswerForm';
 
 const fakeQuestion = new Question(1, 'What is your name?', 'juan@polito.it', '2024-02-07')
 fakeQuestion.init();
@@ -83,8 +85,22 @@ function App() {
     <LanguageContext.Provider value={language}>
       <Container>
         <NavigationBar qtnnumber={1} language={language} toggleLanguage={toggleLanguage}/>
-        <QuestionComponent likes={likes} increaseLikes={increaseLikes} qtnnumber={question.id} question={question.text} email={question.email}></QuestionComponent>
-        <Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer}></Answers>
+        <Routes>
+          <Route path='/' element={
+              <p>List of questions -
+              <Link to='/questions/3'>Go to 3</Link></p>
+          }/>
+          <Route path='/questions/:qid' element={
+            <QuestionComponent likes={likes} increaseLikes={increaseLikes} question={question}/>
+          }>
+            <Route path='add' element={<AnswerForm addAnswer={addAnswer} mode='add'/>}/>
+            <Route index element={<Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer}/>}/>
+          </Route>
+        </Routes>
+
+
+        {/* <QuestionComponent likes={likes} increaseLikes={increaseLikes} qtnnumber={question.id} question={question.text} email={question.email}></QuestionComponent>
+        <Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer}></Answers> */}
       </Container>
     </LanguageContext.Provider>
   )
