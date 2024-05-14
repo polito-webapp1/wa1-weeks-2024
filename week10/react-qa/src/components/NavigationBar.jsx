@@ -1,4 +1,4 @@
-import { Container, Navbar } from 'react-bootstrap';
+import { Button, Container, Navbar } from 'react-bootstrap';
 
 
 import PropTypes from 'prop-types';
@@ -8,6 +8,7 @@ function NavigationBar(props) {
     <Navbar bg='light'>
       <Container fluid>
         <Navbar.Brand>HeapOverrun {props.qtnnumber}</Navbar.Brand>
+        <Button onClick={props.toggleLanguage}>{props.language}</Button>
       </Container>
     </Navbar>
   )

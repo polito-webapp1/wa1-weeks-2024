@@ -6,6 +6,7 @@ import { Question, Answer } from './QAModels.mjs';
 import { Answers } from './components/AnswerComponents';
 import { Like } from './components/Like';
 import { useState } from 'react';
+import LanguageContext  from './contexts/LanguageContext';
 
 const fakeQuestion = new Question(1, 'What is your name?', 'juan@polito.it', '2024-02-07')
 fakeQuestion.init();
@@ -26,6 +27,10 @@ function App() {
   const [likes, setLikes] = useState(0);
 
   const [comment, setComment] = useState('ok');
+
+  const [language, setLanguage] = useState('IT');
+
+  const toggleLanguage = () => { setLanguage(language === 'IT' ? 'EN' : 'IT')}
 
   const increaseLikes = () => { setLikes(oldLikes => oldLikes + 1) };
 
@@ -75,11 +80,13 @@ function App() {
   }
 
   return (
-    <Container>
-      <NavigationBar qtnnumber={1} />
-      <QuestionComponent likes={likes} increaseLikes={increaseLikes} qtnnumber={question.id} question={question.text} email={question.email}></QuestionComponent>
-      <Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer}></Answers>
-    </Container>
+    <LanguageContext.Provider value={language}>
+      <Container>
+        <NavigationBar qtnnumber={1} language={language} toggleLanguage={toggleLanguage}/>
+        <QuestionComponent likes={likes} increaseLikes={increaseLikes} qtnnumber={question.id} question={question.text} email={question.email}></QuestionComponent>
+        <Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer}></Answers>
+      </Container>
+    </LanguageContext.Provider>
   )
 }
 

@@ -1,14 +1,17 @@
 import { Row, Col, Table, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { ArrowUp, PencilSquare, Trash } from 'react-bootstrap-icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import AnswerForm from './AnswerForm';
+import LanguageContext from '../contexts/LanguageContext';
 
 function Answers(props) {
 
   const [mode, setMode] = useState('default');
 
   const [editableAnswer, setEditableAnswer] = useState();
+
+  const language = useContext(LanguageContext) ;
 
   const handleEdit = (answer) => {
     setEditableAnswer(answer);
@@ -35,6 +38,7 @@ function Answers(props) {
 
       {mode === 'edit' &&
         <AnswerForm
+          key={editableAnswer.id}
           mode={mode}
           answer={editableAnswer}
           cancel={() => setMode('default')}
@@ -42,7 +46,7 @@ function Answers(props) {
         />
       }
 
-      {mode === 'default' && <Button variant='primary' onClick={() => {setMode('add');}}>Add</Button>}
+      {mode === 'default' && <Button variant='primary' onClick={() => {setMode('add');}}>{language=='IT'? 'Aggiungi': 'Add'}</Button>}
       
       <h5>{mode}</h5>
     </>
