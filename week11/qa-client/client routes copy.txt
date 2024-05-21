@@ -1,0 +1,16 @@
+LOCATION -> FUNCTION
+
+/ -> home page with a list of questions (can select one, can add one)
+
+/questions/3 -> the details of question number 3 and the list of answers
+    we can delete, edit, upvote, add a new answer
+/questions/:qid
+
+/questions/3/edit/7 -> page for editing an answer (n. 7) to question number 3
+/questions/3/add -> page for adding an anwser to question number 3
+
+/addquestion -> page for adding a new question
+
+/about
+
+/login
