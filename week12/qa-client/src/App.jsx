@@ -3,23 +3,21 @@ import NavigationBar from './components/NavigationBar';
 import QuestionComponent from './components/Question';
 import { Question, Answer } from './QAModels.mjs';
 import { Answers } from './components/AnswerComponents';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LanguageContext from './contexts/LanguageContext';
 import { Routes, Route, Link } from 'react-router-dom';
 import { AnswerForm, EditAnswerForm } from './components/AnswerForm';
 import QuestionList from './components/QuestionList';
+import { loadQuestions } from './api/API';
 
 const fakeQuestion = new Question(1, 'What is your name?', 'juan@polito.it', '2024-02-07')
 fakeQuestion.init();
 
 function App() {
 
-  const [question, setQuestion] = useState({
-    id: fakeQuestion.id,
-    text: fakeQuestion.text,
-    email: fakeQuestion.email,
-    date: fakeQuestion.date,
-  });
+  // States
+
+  const [questions, setQuestions] = useState([]);
 
   const [answers, setAnswers] = useState(
     fakeQuestion.getAnswers()
@@ -28,6 +26,20 @@ function App() {
   const [likes, setLikes] = useState(0);
 
   const [language, setLanguage] = useState('IT');
+
+  const [loading, setLoading] = useState(true);
+
+
+  // Effects 
+  useEffect(()=>{
+    loadQuestions().then((my_questions)=>{
+        setQuestions(my_questions);
+        setLoading(false);
+    })
+    
+}, [])
+
+
 
   const toggleLanguage = () => { setLanguage(language === 'IT' ? 'EN' : 'IT') }
 
@@ -83,16 +95,16 @@ function App() {
     <LanguageContext.Provider value={language}>
       <Container>
         <NavigationBar language={language} toggleLanguage={toggleLanguage} />
-        <Routes>
-          <Route path='/' element={<QuestionList/>} />
+        {!loading && <Routes>
+          <Route path='/' element={<QuestionList questions={questions}/>} />
           <Route path='/questions/:qid' element={
-            <QuestionComponent likes={likes} increaseLikes={increaseLikes} question={question} />
+            <QuestionComponent likes={likes} increaseLikes={increaseLikes} questions={questions} />
           }>
             <Route index element={<Answers answers={answers} deleteAnswer={deleteAnswer} voteUp={voteUp} addAnswer={addAnswer} updateAnswer={updateAnswer} />} />
             <Route path='add' element={<AnswerForm addAnswer={addAnswer} mode='add' />} />
             <Route path='edit/:aid' element={<EditAnswerForm updateAnswer={updateAnswer} answers={answers} />} />
           </Route>
-        </Routes>
+        </Routes>}
       </Container>
     </LanguageContext.Provider>
   )

@@ -2,13 +2,14 @@ import { Container, Col, Row } from "react-bootstrap";
 import { Outlet, useParams } from "react-router-dom";
 
 
-function QuestionComponent(props) {
+function QuestionComponent({likes, increaseLikes, questions}) {
 
   const params = useParams();
   const number = params.qid
 
-  const question = props.question.text;
-  const email = props.question.email;
+  const question = questions.filter((q)=>q.id==number)[0];
+  console.log(question)
+  const email = question.email;
 
   return (
     <>
@@ -18,7 +19,7 @@ function QuestionComponent(props) {
             <p>{number}</p>
           </Col>
           <Col md={6}>
-            <p>{question}</p>
+            <p>{question.text}</p>
           </Col>
           <Col md={4}>
             <p>{email}</p>

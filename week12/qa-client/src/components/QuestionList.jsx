@@ -1,22 +1,14 @@
-import { useEffect, useState } from "react"
-import {loadQuestions} from "../api/API"
+import { Link } from "react-router-dom";
 
-function QuestionList(props) {
+function QuestionList({questions}) {
 
-    const [questions, setQuestions] = useState([]);
-
-    useEffect(()=>{
-        loadQuestions().then((my_questions)=>{
-            setQuestions(my_questions);
-        })
-        
-    }, [])
-
-    if (questions.length==0)
-        return "Loading..."
-    else
+    if(questions.length==0)
+        return "No questions yet"
+    else 
         return <div>
-            {questions.map((q,i)=><p key={i}>{q.text}</p>)}
+        <ul>
+            {questions.map((q,i)=><li key={i}><Link to={`/questions/${q.id}`}>{q.text}</Link></li>)}
+            </ul>
         </div>
 }
 
