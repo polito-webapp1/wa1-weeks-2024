@@ -110,7 +110,7 @@ export const updateAnswer = (answer) => {
       if (err)
         reject(err);
       else if (row === undefined)
-        resolve({ error: "Author not available, check the inserted email." });
+        reject({ error: "Author not available, check the inserted email." });
       else {
         sql = "UPDATE answer SET text = ?, authorId = ?, date = DATE(?), score = ? WHERE id = ?"
         db.run(sql, [answer.text, row.id, answer.date, answer.score, answer.id], function (err) {

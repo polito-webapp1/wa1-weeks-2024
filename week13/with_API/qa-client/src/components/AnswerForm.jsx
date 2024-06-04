@@ -13,7 +13,7 @@ function EditAnswerForm(props) {
   // extract the "state" from the Location (= the fields of the answer to be edited)
   // they have been passed as an argument to 'navigate'
   const location = useLocation()
-  const answer = location.state ;
+  const answer = location.state;
 
   return <AnswerForm answer={answer} mode='edit' updateAnswer={props.updateAnswer} />
 }
@@ -28,7 +28,7 @@ function AnswerForm(props) {
 
   // If the form is being displayed to edit a question (where props.answer is passed to the AnswerForm component [AnswerComponents.jsx: line 39]), the initial state of its fields is set to the values of the passed answer; otherwise, we initialize it as empty
 
-  const {qid, aid} = useParams();
+  const { qid, aid } = useParams();
 
 
   const [email, setEmail] = useState(props.answer ? props.answer.email : '');
@@ -48,21 +48,27 @@ function AnswerForm(props) {
 
     if (props.answer) {
       console.log('handlesubmit', answer)
-      await updateAnswer({ id: props.answer.id, score: props.answer.score, ...answer });
-      navigate('..'); // back to list of answers
+      try {
+
+        await updateAnswer({ id: props.answer.id, score: props.answer.score, ...answer });
+        navigate('..'); // back to list of answers
+      } catch (ex) {
+        setError(ex.message)
+      }
+
     }
     else {
       try {
         await addAnswer(qid, answer);
         navigate('..'); // back to list of answers
-      } catch(ex) {
+      } catch (ex) {
         setError(ex.message)
       }
     }
   }
 
   return (
-    
+
     <Form onSubmit={handleSubmit}>
       <div>{error}</div>
       <Form.Group className='mb-3'>
